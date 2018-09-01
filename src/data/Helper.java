@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 public class Helper {
 
+    public final static int CLEAN_ALL = 0;
+    public final static int CLEAN_EXTRA = 1;
+    public final static int NO_CLEAN = -1;
+    public final static int SELECTED_NODE = 0;
+    public final static int SECONDARY_NODE = 1;
     private final static int WIDTH = 1200;
     private final static int HEIGHT = 389;
     private final static Tree TREE = new Tree();
@@ -37,12 +42,15 @@ public class Helper {
         return okay;
     }
 
-    public static void onClick(int x, int y, boolean isPrincipal) {
-        if (isPrincipal) {
-            selectedNode = TREE.nodeOn(x, y);
-            secondaryNode = selectedNode == null ? null : secondaryNode;
-        } else {
-            secondaryNode = TREE.nodeOn(x, y);
+    public static void onClick(int x, int y, int node) {
+        switch (node) {
+            case SELECTED_NODE:
+                selectedNode = TREE.nodeOn(x, y);
+                secondaryNode = selectedNode == null ? null : secondaryNode;
+                break;
+            case SECONDARY_NODE:
+                secondaryNode = TREE.nodeOn(x, y);
+                break;
         }
     }
 
@@ -50,7 +58,7 @@ public class Helper {
         ArrayList<Node> level;
         int i = 0;
         int n = 1;
-        int sizeX = 70;
+        int sizeX = 65;
         int sizeY = 25;
         int dy = 45;
         int y1 = dy;
@@ -73,21 +81,21 @@ public class Helper {
         } while (!level.isEmpty());
     }
 
-    public static void drawTree(Graphics g, boolean all) {
+    public static void drawTree(Graphics g, int type) {
         ArrayList<Node> level;
-        base(g, all);
+        base(g, type);
         int i = 0;
         do {
             level = TREE.getLevel(i);
             for (Node node : level) {
                 if (node == selectedNode && node == secondaryNode) {
-                    node.draw(g, SELECTED, SECONDARY, LINE);
+                    node.draw(g, SELECTED, SECONDARY, LINE, i);
                 } else if (node == selectedNode) {
-                    node.draw(g, SELECTED, LINE);
+                    node.draw(g, SELECTED, LINE, i);
                 } else if (node == secondaryNode) {
-                    node.draw(g, SECONDARY, LINE);
+                    node.draw(g, SECONDARY, LINE, i);
                 } else {
-                    node.draw(g, NORMAL, LINE);
+                    node.draw(g, NORMAL, LINE, i);
                 }
             }
             i++;
@@ -109,25 +117,59 @@ public class Helper {
     }
 
     private static void drawIndicator(Graphics g) {
-        int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, height = y2 - y1, medWidth = width / 2, d = 9;
+        int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
+        int[][] coord = new int[][]{
+            {x1, x1 + 20, x1 + 20, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + 20, x1 + 20, x1},
+            {y1, y1, y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4, y2, y2}
+        };
+        int[][] halfLeft = new int[][]{
+            {x1, x1 + 20, x1 + 20, x1 + medWidth + d, x1 + medWidth - d, x1 + 20, x1 + 20, x1},
+            {y1, y1, y1 + 4, y1 + 4, y2 - 4, y2 - 4, y2, y2}
+        };
+        int[][] halfRight = new int[][]{
+            {x1 + medWidth + d, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + medWidth - d},
+            {y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4}
+        };
         g.setColor(selectedNode == null ? Color.WHITE : SELECTED);
-        g.fillPolygon(new int[]{x1, x1 + medWidth + d, x1 + medWidth - d, x1}, new int[]{y1, y1, y2, y2}, 4);
+        g.fillPolygon(halfLeft[0], halfLeft[1], 8);
         g.setColor(secondaryNode == null ? Color.WHITE : SECONDARY);
-        g.fillPolygon(new int[]{x1 + medWidth + d, x2, x2, x1 + medWidth - d}, new int[]{y1, y1, y2, y2}, 4);
+        g.fillPolygon(halfRight[0], halfRight[1], 8);
         g.setColor(LINE);
         g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
         g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
         g.drawLine(x2 - 5, y1 + 5, x2 - 16, y2 - 5);
         g.drawLine(x2 - 11, y2 - 11, x2 - 16, y1 + 5);
-        g.drawRect(x1, y1, width, height);
+        if (selectedNode == null || secondaryNode == null || selectedNode == secondaryNode) {
+            int[][] pos = new int[][]{
+                {x1 + medWidth + d - 3, x1 + medWidth + d + 3, x1 + medWidth - d + 3, x1 + medWidth - d - 3},
+                {y1 + 4, y1 + 4, y2 - 4, y2 - 4}
+            };
+            g.fillPolygon(pos[0], pos[1], 4);
+        } else if (!calcRelationship().equals("...")) {
+            g.setColor(LINE);
+
+            for (int i = 1; i < width - 40 - d * 2; i++) {
+                if (i % 2 == 0) {
+                    g.setColor(SECONDARY);
+                } else {
+                    g.setColor(SELECTED);
+                }
+                g.drawLine(x1 + 20 + d * 2 + i, y1 + 4, x1 + 20 + i, y2 - 4);
+            }
+        }
+        g.setColor(LINE);
+        g.drawPolygon(coord[0], coord[1], 12);
     }
 
-    private static void base(Graphics g, boolean all) {
+    private static void base(Graphics g, int type) {
         g.setColor(BACKGROUND);
-        if (all) {
-            g.fillRect(0, 0, WIDTH + 1, HEIGHT + 1);
-        } else {
-            g.fillRect(0, 0, 200, 80);
+        switch (type) {
+            case CLEAN_ALL:
+                g.fillRect(0, 0, WIDTH, HEIGHT);
+                break;
+            case CLEAN_EXTRA:
+                g.fillRect(0, 271, WIDTH, HEIGHT - 270);
+                break;
         }
         drawIndicator(g);
     }
@@ -152,8 +194,7 @@ public class Helper {
             "Milena Arias",
             "Pedro Perez",
             "Estefani Tellez",
-            "Maria Patricia",
-        };
+            "Maria Patricia",};
         int i = (int) (Math.random() * names.length);
         addChild(new Parent(names[i]), true);
         i++;

@@ -44,14 +44,14 @@ public class Node {
         return this.nextByPosition(node.gInfo.x1 + 1, node.gInfo.x1 + 1);
     }
 
-    public void draw(Graphics g, Color base, Color line) {
-        this.gInfo.draw(g, base, line);
+    public void draw(Graphics g, Color base, Color line, int level) {
+        this.gInfo.draw(g, base, line, level);
         this.gInfo.drawText(g, this.parent.getShortName().toCharArray(), line);
         this.gInfo.drawConnections(g, this, line);
     }
 
-    public void draw(Graphics g, Color base, Color secondary, Color line) {
-        this.gInfo.draw(g, base, secondary, line);
+    public void draw(Graphics g, Color base, Color secondary, Color line, int level) {
+        this.gInfo.draw(g, base, secondary, line, level);
         this.gInfo.drawText(g, this.parent.getShortName().toCharArray(), line);
         this.gInfo.drawConnections(g, this, line);
     }

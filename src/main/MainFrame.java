@@ -8,10 +8,10 @@ import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class MainFrame extends javax.swing.JFrame {
-    
+
     public MainFrame() {
         initComponents();
-        Helper.drawTree(this.treeView.getGraphics(), true);
+        Helper.drawTree(this.treeView.getGraphics(), Helper.CLEAN_ALL);
         this.instructionsList.setText(""
                 + "1. Creando un nuevo arbol: Sección roja. Escribe el nombre de tu primer pariente para crear un nuevo arbol, luego haz click en el boton \"Crear nuevo arbol\".\n"
                 + "2. Agregando hijos a un pariente: Sección amarilla. Haz click en un pariente, se marcará en color verde, luego escribe el nombre del hijo a agregar y finalmente pulsa el botón de \"Agregar hijo\".\n"
@@ -20,7 +20,7 @@ public class MainFrame extends javax.swing.JFrame {
                 + "5. Finalmente para conocer las relaciones entre un pariente y otro debes hacer click izquierdo en un pariente, se marcará de color verde, luego haz click derecho en cualquier otro pariente, se marcará en color lila, y en la sección lila del panel verá la relación o parentesco entre los dos parientes."
         );
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -375,15 +375,16 @@ public class MainFrame extends javax.swing.JFrame {
             this.selectedName.setText("Seleccione un pariente");
         }
     }
-    
-    private void updateUI(boolean all) {
+
+    private void updateUI(int type) {
         Helper.setDrawingProps();
-        Helper.drawTree(this.treeView.getGraphics(), all);
+        Helper.drawTree(this.treeView.getGraphics(), type);
     }
 
     private void treeViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treeViewMouseClicked
-        Helper.onClick(evt.getX(), evt.getY(), !(evt.getButton() == java.awt.event.MouseEvent.BUTTON3));
-        Helper.drawTree(this.treeView.getGraphics(), false);
+        int node = evt.getButton() == java.awt.event.MouseEvent.BUTTON3 ? Helper.SECONDARY_NODE : Helper.SELECTED_NODE;
+        Helper.onClick(evt.getX(), evt.getY(), node);
+        Helper.drawTree(this.treeView.getGraphics(), Helper.NO_CLEAN);
         this.updateOthers();
     }//GEN-LAST:event_treeViewMouseClicked
 
@@ -391,14 +392,14 @@ public class MainFrame extends javax.swing.JFrame {
         Helper.addChild(new Parent(this.childName.getText().trim()), false);
         this.childName.setText("");
         this.addChild.setEnabled(false);
-        this.updateUI(false);
+        this.updateUI(Helper.NO_CLEAN);
     }//GEN-LAST:event_addChildActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         Helper.removeSelected();
         this.addChild.setEnabled(false);
         this.childName.setText("");
-        this.updateUI(true);
+        this.updateUI(Helper.CLEAN_ALL);
         this.updateOthers();
     }//GEN-LAST:event_deleteActionPerformed
 
@@ -414,7 +415,7 @@ public class MainFrame extends javax.swing.JFrame {
         Helper.getSelectedNode().setName(this.newName.getText().trim());
         this.newName.setText("");
         this.updateOthers();
-        this.updateUI(false);
+        this.updateUI(Helper.NO_CLEAN);
     }//GEN-LAST:event_changeNameActionPerformed
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
@@ -422,7 +423,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.newTreeName.setText("");
         this.generate.setEnabled(false);
         this.updateOthers();
-        this.updateUI(true);
+        this.updateUI(Helper.CLEAN_ALL);
     }//GEN-LAST:event_generateActionPerformed
 
     private void newTreeNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_newTreeNameKeyReleased
@@ -431,9 +432,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void generate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generate1ActionPerformed
         Helper.testTree();
-        this.updateUI(true);
+        this.updateUI(Helper.CLEAN_EXTRA);
     }//GEN-LAST:event_generate1ActionPerformed
-    
+
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new WindowsLookAndFeel());

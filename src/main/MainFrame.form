@@ -164,7 +164,10 @@
                   <Color blue="c2" green="eb" red="eb" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI Light" size="16" style="0"/>
+                  <Font name="Segoe UI Semibold" size="16" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="Agregar hijo"/>
@@ -176,6 +179,9 @@
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Child name"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -190,7 +196,7 @@
                   <Font name="Segoe UI Light" size="11" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="99" red="0" type="rgb"/>
+                  <Color blue="42" green="82" red="42" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Agregar hijo"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -206,7 +212,7 @@
                   <Font name="Segoe UI Light" size="11" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="0" red="cc" type="rgb"/>
+                  <Color blue="6" green="42" red="be" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Eliminar pariente"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -260,7 +266,10 @@
                   <Color blue="b8" green="eb" red="b8" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI Light" size="16" style="0"/>
+                  <Font name="Segoe UI Semibold" size="16" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="Instrucciones"/>
@@ -284,6 +293,9 @@
                     <Property name="columns" type="int" value="20"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI Light" size="13" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="82" green="42" red="42" type="rgb"/>
                     </Property>
                     <Property name="lineWrap" type="boolean" value="true"/>
                     <Property name="rows" type="int" value="5"/>
@@ -346,7 +358,10 @@
                   <Color blue="eb" green="b8" red="b8" type="rgb"/>
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI Light" size="16" style="0"/>
+                  <Font name="Segoe UI Semibold" size="16" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="Seleccione un pariente"/>
@@ -358,6 +373,9 @@
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Child name"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -372,7 +390,7 @@
                   <Font name="Segoe UI Light" size="11" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="0" type="rgb"/>
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cambiar nombre"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -389,6 +407,9 @@
                 </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="16" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="..."/>
@@ -438,6 +459,9 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI Light" size="12" style="0"/>
                 </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="82" green="42" red="42" type="rgb"/>
+                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Child name"/>
               </Properties>
               <Events>
@@ -450,7 +474,7 @@
                   <Font name="Segoe UI Light" size="11" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="0" type="rgb"/>
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Crear nuevo arbol"/>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -466,7 +490,7 @@
                   <Font name="Segoe UI Light" size="11" style="0"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="66" green="66" red="0" type="rgb"/>
+                  <Color blue="82" green="42" red="42" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Prueba"/>
                 <Property name="opaque" type="boolean" value="false"/>

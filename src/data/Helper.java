@@ -2,6 +2,7 @@ package data;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
 
 public class Helper {
@@ -19,29 +20,55 @@ public class Helper {
     private final static Color NORMAL = new Color(250, 250, 250);
     private final static Color SELECTED = new Color(204, 255, 204);
     private final static Color SECONDARY = new Color(204, 204, 255);
-    private final static Color LINE = new Color(66, 66, 66);
+    private final static Color LINE = new Color(66, 66, 130);
     private final static Color BACKGROUND = new Color(255, 244, 193);
+    private static Polygon indicator;
+    private static Polygon halfL;
+    private static Polygon halfR;
 
+    /**
+     *
+     * @return Nodo seleccionado (X)
+     */
     public static Node getSelectedNode() {
         return selectedNode;
     }
 
+    /**
+     *
+     * @return Nodo secundario (Y)
+     */
     public static Node getSecondaryNode() {
         return secondaryNode;
     }
 
-    public static boolean addChild(Parent child, boolean newTree) {
+    /**
+     * Agrega un nodo hijo al nodo seleccionado (X)
+     *
+     * @param child Pariente a gregar
+     * @param newTree Indica si es un arbol nuevo o si se agregará al actual
+     */
+    public static void addChild(Parent child, boolean newTree) {
         if (newTree) {
             TREE.clean();
         }
-        boolean okay = TREE.addChild(selectedNode, child);
+        TREE.addChild(selectedNode, child);
         if (newTree) {
             selectedNode = null;
             secondaryNode = null;
         }
-        return okay;
     }
 
+    /**
+     * Asigna el nodo en la posición (x, y) a la variable que corresponda según
+     * el botón del mouse que se presione (IZQUIERDO para nodo seleccionado (X)
+     * ó DERECHO para nodo secundario (Y))
+     *
+     * @param x Posición en el eje x donde se pulsó el click
+     * @param y Posición en el eje y donde se pulsó el click
+     * @param node Nodo que se prentende seleccionar (botón presionado del
+     * mouse)
+     */
     public static void onClick(int x, int y, int node) {
         switch (node) {
             case SELECTED_NODE:
@@ -54,6 +81,9 @@ public class Helper {
         }
     }
 
+    /**
+     * Establece las posiciones (x, y) en que se va a dibujar cada nodo
+     */
     public static void setDrawingProps() {
         ArrayList<Node> level;
         int i = 0;
@@ -66,11 +96,11 @@ public class Helper {
             level = TREE.getLevel(i);
             int dx = WIDTH / n;
             int x1 = dx / 2;
-            for (int j = 1; j <= level.size(); j++) {
-                Node node = level.get(j - 1);
+            for (int j = 0; j < level.size(); j++) {
+                Node node = level.get(j);
                 if (node != null) {
                     x1 += node.pos * dx;
-                    node.gInfo.set(x1, y1, x1 + sizeX, y1 + sizeY);
+                    node.gInfo.set(x1, y1, x1 + sizeX, y1 + sizeY, i);
                 }
                 x1 = dx / 2;
             }
@@ -81,6 +111,13 @@ public class Helper {
         } while (!level.isEmpty());
     }
 
+    /**
+     * Dibuja el árbol genealógico
+     *
+     * @param g Instancia de Graphics en la que se dibujará el árbol
+     * @param type Tipo de dibujado que se hará, sólo cambia el qué de lo que ya
+     * estaba se va a borrar
+     */
     public static void drawTree(Graphics g, int type) {
         ArrayList<Node> level;
         base(g, type);
@@ -89,13 +126,13 @@ public class Helper {
             level = TREE.getLevel(i);
             for (Node node : level) {
                 if (node == selectedNode && node == secondaryNode) {
-                    node.draw(g, SELECTED, SECONDARY, LINE, i);
+                    node.draw(g, SELECTED, SECONDARY, LINE);
                 } else if (node == selectedNode) {
-                    node.draw(g, SELECTED, LINE, i);
+                    node.draw(g, SELECTED, LINE);
                 } else if (node == secondaryNode) {
-                    node.draw(g, SECONDARY, LINE, i);
+                    node.draw(g, SECONDARY, LINE);
                 } else {
-                    node.draw(g, NORMAL, LINE, i);
+                    node.draw(g, NORMAL, LINE);
                 }
             }
             i++;
@@ -103,20 +140,35 @@ public class Helper {
         g.dispose();
     }
 
+    /**
+     * Elimina el nodo seleccionado (X) y sus hijos
+     */
     public static void removeSelected() {
         TREE.remove(selectedNode);
         selectedNode = null;
+        secondaryNode = null;
     }
 
+    /**
+     * @return Verdadero si el nodo seleccionado (X) es la raíz de todo el árbol
+     */
     public static boolean selectedIsRoot() {
         return TREE.isRoot(selectedNode);
     }
 
+    /**
+     *
+     * @return Relación entre el nodo seleccionado (X) y el nodo secundario (Y)
+     */
     public static String calcRelationship() {
         return TREE.calcRelationship(selectedNode, secondaryNode);
     }
 
-    private static void drawIndicator(Graphics g) {
+    /**
+     * Inicializa el indicador de relación y selección que se dibuja en la parte
+     * superior del panel del árbol
+     */
+    public static void initIndicator() {
         int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
         int[][] coord = new int[][]{
             {x1, x1 + 20, x1 + 20, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + 20, x1 + 20, x1},
@@ -130,10 +182,22 @@ public class Helper {
             {x1 + medWidth + d, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + medWidth - d},
             {y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4}
         };
+        indicator = new Polygon(coord[0], coord[1], 12);
+        halfL = new Polygon(halfLeft[0], halfLeft[1], 8);
+        halfR = new Polygon(halfRight[0], halfRight[1], 8);
+    }
+
+    /**
+     * Dibuja el indicador de relación y selección
+     *
+     * @param g Instancia de Graphics en la que se dibujará
+     */
+    private static void drawIndicator(Graphics g) {
+        int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
         g.setColor(selectedNode == null ? Color.WHITE : SELECTED);
-        g.fillPolygon(halfLeft[0], halfLeft[1], 8);
+        g.fillPolygon(halfL);
         g.setColor(secondaryNode == null ? Color.WHITE : SECONDARY);
-        g.fillPolygon(halfRight[0], halfRight[1], 8);
+        g.fillPolygon(halfR);
         g.setColor(LINE);
         g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
         g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
@@ -158,22 +222,41 @@ public class Helper {
             }
         }
         g.setColor(LINE);
-        g.drawPolygon(coord[0], coord[1], 12);
+        g.drawPolygon(indicator);
     }
 
+    /**
+     * Colorea la base donde se dibujará, borrando así sólo lo necesario de lo
+     * que ya estaba dibujado dependiendo de que tipo de dibujado se hará,
+     * además llama a drawIndicator y a drawFlag para que hagan el dibujado de
+     * el indicador y de la bandera de generaciones
+     *
+     * @param g Instancia de Graphics en la que se dibujará
+     * @param type Tipo de limpiado (TODO, NADA ó BAJO EL CUARTO NIVEL, en estos
+     * dos últimos además se borra el área de la bandera de generaciones)
+     */
     private static void base(Graphics g, int type) {
         g.setColor(BACKGROUND);
         switch (type) {
+            case NO_CLEAN:
+                g.fillRect(0, 0, 14, HEIGHT);
+                break;
             case CLEAN_ALL:
                 g.fillRect(0, 0, WIDTH, HEIGHT);
                 break;
             case CLEAN_EXTRA:
                 g.fillRect(0, 271, WIDTH, HEIGHT - 270);
+                g.fillRect(0, 0, 14, HEIGHT);
                 break;
         }
         drawIndicator(g);
+        drawFlag(g);
     }
 
+    /**
+     * Genera un árbol genealógico aleatorio usando una lista predefinida de
+     * nombres
+     */
     public static void testTree() {
         String[] names = new String[]{
             "Juan Barros",
@@ -214,5 +297,42 @@ public class Helper {
             level++;
             levelNodes = TREE.getLevel(level);
         } while (level < 4);
+    }
+
+    /**
+     * Dibuja la bandera de las generaciones
+     *
+     * @param g Instancia de Graphics en la que se dibujará
+     */
+    private static void drawFlag(Graphics g) {
+        if (selectedNode != null && secondaryNode != null) {
+            Node up;
+            Node down;
+            if (selectedNode.gInfo.y1 < secondaryNode.gInfo.y1) {
+                up = selectedNode;
+                down = secondaryNode;
+            } else {
+                up = secondaryNode;
+                down = selectedNode;
+            }
+            GraphicInfo g1 = up.gInfo;
+            GraphicInfo g2 = down.gInfo;
+            int y1 = g1.y1 + 1;
+            int y2 = g2.y2 - 1;
+            g.setColor(LINE);
+            if (up != down) {
+                g.fillRect(0, y1, 2, y2 - y1);
+            }
+            g.fillRect(0, y1, 14, 20);
+            char[] chars = Integer.toString(TREE.difOfLevels(selectedNode, secondaryNode)).toCharArray();
+            g.setColor(NORMAL);
+            g.drawChars(chars, 0, chars.length, 3, y1 + 15);
+//            if (TREE.isSubtree(up, down)) {
+//            } else {
+//                g.fillRect(0, y1, 14, 20);
+//                g.setColor(NORMAL);
+//                g.drawChars(new char[]{'-'}, 0, 1, 3, y1 + 15);
+//            }
+        }
     }
 }

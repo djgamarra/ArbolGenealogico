@@ -11,7 +11,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     public MainFrame() {
         initComponents();
-        Helper.drawTree(this.treeView.getGraphics(), Helper.CLEAN_ALL);
+        Helper.initIndicator();
         this.instructionsList.setText(""
                 + "1. Creando un nuevo arbol: Sección roja. Escribe el nombre de tu primer pariente para crear un nuevo arbol, luego haz click en el boton \"Crear nuevo arbol\".\n"
                 + "2. Agregando hijos a un pariente: Sección amarilla. Haz click en un pariente, se marcará en color verde, luego escribe el nombre del hijo a agregar y finalmente pulsa el botón de \"Agregar hijo\".\n"
@@ -73,13 +73,15 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
 
         selectedName1.setBackground(new java.awt.Color(235, 235, 194));
-        selectedName1.setFont(new java.awt.Font("Segoe UI Light", 0, 16)); // NOI18N
+        selectedName1.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        selectedName1.setForeground(new java.awt.Color(66, 66, 130));
         selectedName1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         selectedName1.setText("Agregar hijo");
         selectedName1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         selectedName1.setOpaque(true);
 
         childName.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        childName.setForeground(new java.awt.Color(66, 66, 130));
         childName.setToolTipText("Child name");
         childName.setEnabled(false);
         childName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -89,7 +91,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         addChild.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        addChild.setForeground(new java.awt.Color(0, 153, 102));
+        addChild.setForeground(new java.awt.Color(66, 130, 66));
         addChild.setText("Agregar hijo");
         addChild.setEnabled(false);
         addChild.setOpaque(false);
@@ -100,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         delete.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        delete.setForeground(new java.awt.Color(204, 0, 51));
+        delete.setForeground(new java.awt.Color(190, 66, 6));
         delete.setText("Eliminar pariente");
         delete.setEnabled(false);
         delete.setOpaque(false);
@@ -145,7 +147,8 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(0, 255, 255));
 
         instructions.setBackground(new java.awt.Color(184, 235, 184));
-        instructions.setFont(new java.awt.Font("Segoe UI Light", 0, 16)); // NOI18N
+        instructions.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        instructions.setForeground(new java.awt.Color(66, 66, 130));
         instructions.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         instructions.setText("Instrucciones");
         instructions.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -155,6 +158,7 @@ public class MainFrame extends javax.swing.JFrame {
         instructionsList.setBackground(new java.awt.Color(204, 255, 204));
         instructionsList.setColumns(20);
         instructionsList.setFont(new java.awt.Font("Segoe UI Light", 0, 13)); // NOI18N
+        instructionsList.setForeground(new java.awt.Color(66, 66, 130));
         instructionsList.setLineWrap(true);
         instructionsList.setRows(5);
         instructionsList.setWrapStyleWord(true);
@@ -185,13 +189,15 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(204, 204, 255));
 
         selectedName.setBackground(new java.awt.Color(184, 184, 235));
-        selectedName.setFont(new java.awt.Font("Segoe UI Light", 0, 16)); // NOI18N
+        selectedName.setFont(new java.awt.Font("Segoe UI Semibold", 0, 16)); // NOI18N
+        selectedName.setForeground(new java.awt.Color(66, 66, 130));
         selectedName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         selectedName.setText("Seleccione un pariente");
         selectedName.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         selectedName.setOpaque(true);
 
         newName.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        newName.setForeground(new java.awt.Color(66, 66, 130));
         newName.setToolTipText("Child name");
         newName.setEnabled(false);
         newName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -201,7 +207,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         changeName.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        changeName.setForeground(new java.awt.Color(0, 102, 102));
+        changeName.setForeground(new java.awt.Color(66, 66, 130));
         changeName.setText("Cambiar nombre");
         changeName.setEnabled(false);
         changeName.setOpaque(false);
@@ -213,6 +219,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         relation.setBackground(new java.awt.Color(184, 184, 235));
         relation.setFont(new java.awt.Font("Segoe UI Light", 0, 16)); // NOI18N
+        relation.setForeground(new java.awt.Color(66, 66, 130));
         relation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         relation.setText("...");
         relation.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -249,6 +256,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel5.setBackground(new java.awt.Color(255, 153, 153));
 
         newTreeName.setFont(new java.awt.Font("Segoe UI Light", 0, 12)); // NOI18N
+        newTreeName.setForeground(new java.awt.Color(66, 66, 130));
         newTreeName.setToolTipText("Child name");
         newTreeName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -257,7 +265,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         generate.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        generate.setForeground(new java.awt.Color(0, 102, 102));
+        generate.setForeground(new java.awt.Color(66, 66, 130));
         generate.setText("Crear nuevo arbol");
         generate.setEnabled(false);
         generate.setOpaque(false);
@@ -268,7 +276,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         generate1.setFont(new java.awt.Font("Segoe UI Light", 0, 11)); // NOI18N
-        generate1.setForeground(new java.awt.Color(0, 102, 102));
+        generate1.setForeground(new java.awt.Color(66, 66, 130));
         generate1.setText("Prueba");
         generate1.setOpaque(false);
         generate1.addActionListener(new java.awt.event.ActionListener() {
@@ -354,8 +362,11 @@ public class MainFrame extends javax.swing.JFrame {
     private void updateOthers() {
         boolean selected = Helper.getSelectedNode() != null;
         boolean secondary = Helper.getSecondaryNode() != null;
+        this.childName.setText("");
+        this.newName.setText("");
         this.childName.setEnabled(selected);
         this.changeName.setEnabled(false);
+        this.addChild.setEnabled(false);
         this.newName.setEnabled(selected);
         this.delete.setEnabled(selected && !Helper.selectedIsRoot());
         if (selected) {

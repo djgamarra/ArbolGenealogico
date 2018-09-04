@@ -1,10 +1,55 @@
 package data;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 public class Tree {
 
     Node root;
+
+    /**
+     * Inicia el dibujado del árbol genealógico desde la raíz
+     *
+     * @param g Instancia de Graphics en la que se va a dibujar el árbol
+     * @param colorPrimary Color primario
+     * @param colorSecondary Color secundario
+     * @param colorNormal Color normal
+     * @param colorLine Color de líneas y bordes
+     * @param selectedNode Nodo seleccionado (X)
+     * @param secondaryNode Nodo secundario (Y)
+     */
+    public void draw(Graphics g, Color colorPrimary, Color colorSecondary, Color colorNormal, Color colorLine, Node selectedNode, Node secondaryNode) {
+        this.draw(g, colorPrimary, colorSecondary, colorNormal, colorLine, this.root, selectedNode, secondaryNode);
+    }
+
+    /**
+     * Método recursivo que dibuja todo el árbol genealógico
+     *
+     * @param g Instancia de Graphics en la que se va a dibujar el árbol
+     * @param colorPrimary Color primario
+     * @param colorSecondary Color secundario
+     * @param colorNormal Color normal
+     * @param colorLine Color de líneas y bordes
+     * @param root Raíz actual
+     * @param selectedNode Nodo seleccionado (X)
+     * @param secondaryNode Nodo secundario (Y)
+     */
+    public void draw(Graphics g, Color colorPrimary, Color colorSecondary, Color colorNormal, Color colorLine, Node root, Node selectedNode, Node secondaryNode) {
+        if (root != null) {
+            if (root == selectedNode && root == secondaryNode) {
+                root.draw(g, colorPrimary, colorSecondary, colorLine);
+            } else if (root == selectedNode) {
+                root.draw(g, colorPrimary, colorLine);
+            } else if (root == secondaryNode) {
+                root.draw(g, colorSecondary, colorLine);
+            } else {
+                root.draw(g, colorNormal, colorLine);
+            }
+            draw(g, colorPrimary, colorSecondary, colorNormal, colorLine, root.left, selectedNode, secondaryNode);
+            draw(g, colorPrimary, colorSecondary, colorNormal, colorLine, root.right, selectedNode, secondaryNode);
+        }
+    }
 
     /**
      * Inicia la búsqueda de un nodo en una posición (x, y)
@@ -220,7 +265,7 @@ public class Tree {
      * @return Nodo padre del nodo hijo
      */
     public Node fatherOf(Node node) {
-        return this.fatherOf(this.root, node);
+        return fatherOf(this.root, node);
     }
 
     /**
@@ -255,7 +300,7 @@ public class Tree {
      * ó mayor
      */
     public boolean outOfLevel(Node node1, Node node2) {
-        return this.difOfLevels(node1, node2) >= 3;
+        return difOfLevels(node1, node2) >= 3;
     }
 
     /**
@@ -264,7 +309,7 @@ public class Tree {
      * @return Diferencia entre los niveles del nodo 1 y 2
      */
     public int difOfLevels(Node node1, Node node2) {
-        return Math.abs(this.levelOf(this.root, node1, 0) - this.levelOf(this.root, node2, 0));
+        return Math.abs(levelOf(this.root, node1, 0) - levelOf(this.root, node2, 0));
     }
 
     /**
@@ -280,7 +325,7 @@ public class Tree {
             if (root == node) {
                 return level;
             } else {
-                return this.levelOf(root.nextByPosition(node), node, level + 1);
+                return levelOf(root.nextByPosition(node), node, level + 1);
             }
         }
         return -1;

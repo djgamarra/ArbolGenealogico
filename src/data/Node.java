@@ -31,6 +31,20 @@ public class Node {
     }
 
     /**
+     * @return Nivel del nodo
+     */
+    public int getLevel() {
+        return gInfo.level;
+    }
+
+    /**
+     * @return Verdadero si tiene dos hijos
+     */
+    public boolean isBusy() {
+        return left != null && right != null;
+    }
+
+    /**
      * Agrega un nodo hijo dependiendo de si el nodo actual es hijo izquierdo ó
      * hijo derecho y de si tiene ya o no hijo izquierdo ó derecho
      *
@@ -84,7 +98,7 @@ public class Node {
      */
     public void draw(Graphics g, Color color, Color line) {
         this.gInfo.draw(g, color, line);
-        this.gInfo.drawText(g, this.parent.getShortName().toCharArray(), line);
+        this.gInfo.drawText(g, this.parent.getShortName(), line);
         this.gInfo.drawConnections(g, this, line);
     }
 
@@ -98,7 +112,7 @@ public class Node {
      */
     public void draw(Graphics g, Color base, Color secondary, Color line) {
         this.gInfo.draw(g, base, secondary, line);
-        this.gInfo.drawText(g, this.parent.getShortName().toCharArray(), line);
+        this.gInfo.drawText(g, this.parent.getShortName(), line);
         this.gInfo.drawConnections(g, this, line);
     }
 

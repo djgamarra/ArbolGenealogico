@@ -54,9 +54,6 @@ public class GraphicInfo {
         return this.polygon.contains(x, y);
     }
 
-//    public boolean isIn(GraphicInfo gInfo) {
-//        return this.polygon.contains(gInfo.centerX, gInfo.centerY);
-//    }
     /**
      * Genera una matriz de puntos (x, y) en los que se dibujará el poligono que
      * representa gráficamente el nodo
@@ -64,10 +61,17 @@ public class GraphicInfo {
      * @return Matriz de puntos (x, y) x = [0], y = [1]
      */
     private int[][] generateCoordinates() {
-        return new int[][]{
-            {x1 - (level < 4 ? 15 : 2), x1 - 2, x1 + 2, x2 - 2, x2 + 2, x2 + (level < 4 ? 15 : 2), x2 + 2, x2 - 2, x1 + 2, x1 - 2},
-            {centerY, y1 + 2, y1, y1, y1 + 2, centerY, y2 - 2, y2, y2, y2 - 2}
-        };
+        if (level < 4) {
+            return new int[][]{
+                {x1 - 15, x1 - 4, x1 + 4, x2 - 4, x2 + 4, x2 + 15, x2 + 4, x2 - 4, x1 + 4, x1 - 4},
+                {centerY, y1 + 3, y1, y1, y1 + 3, centerY, y2 - 3, y2, y2, y2 - 3}
+            };
+        } else {
+            return new int[][]{
+                {x1 - 2, x1 - 2, x1 + 2, x2 - 2, x2 + 2, x2 + 2, x2 + 2, x2 - 2, x1 + 2, x1 - 2},
+                {centerY, y1 + 3, y1, y1, y1 + 3, centerY, y2 - 3, y2, y2, y2 - 3}
+            };
+        }
     }
 
     /**
@@ -81,16 +85,30 @@ public class GraphicInfo {
     private int[][] halfCoordinates(boolean left) {
         int medWidth = width / 2;
         int desp = 11;
-        if (left) {
-            return new int[][]{
-                {x1 - (level < 4 ? 15 : 2), x1 - 2, x1 + 2, x1 + medWidth + desp, x1 + medWidth - desp, x1 + 2, x1 - 2},
-                {centerY, y1 + 2, y1, y1, y2, y2, y2 - 2}
-            };
+        if (level < 4) {
+            if (left) {
+                return new int[][]{
+                    {x1 - 15, x1 - 4, x1 + 4, x1 + medWidth + desp, x1 + medWidth - desp, x1 + 4, x1 - 4},
+                    {centerY, y1 + 3, y1, y1, y2, y2, y2 - 3}
+                };
+            } else {
+                return new int[][]{
+                    {x1 + medWidth + desp, x2 - 4, x2 + 4, x2 + 15, x2 + 4, x2 - 4, x1 + medWidth - desp},
+                    {y1, y1, y1 + 3, centerY, y2 - 3, y2, y2}
+                };
+            }
         } else {
-            return new int[][]{
-                {x1 + medWidth + desp, x2 - 2, x2 + 2, x2 + (level < 4 ? 15 : 2), x2 + 2, x2 - 2, x1 + medWidth - desp},
-                {y1, y1, y1 + 2, centerY, y2 - 2, y2, y2}
-            };
+            if (left) {
+                return new int[][]{
+                    {x1 - 2, x1 - 2, x1 + 2, x1 + medWidth + desp, x1 + medWidth - desp, x1 + 2, x1 - 2},
+                    {centerY, y1 + 3, y1, y1, y2, y2, y2 - 3}
+                };
+            } else {
+                return new int[][]{
+                    {x1 + medWidth + desp, x2 - 3, x2 + 3, x2 + (level < 4 ? 15 : 3), x2 + 3, x2 - 3, x1 + medWidth - desp},
+                    {y1, y1, y1 + 3, centerY, y2 - 3, y2, y2}
+                };
+            }
         }
     }
 
@@ -151,8 +169,8 @@ public class GraphicInfo {
      * @param name Nombre del pariente convertido a array
      * @param color Color del texto
      */
-    public void drawText(Graphics g, char[] name, Color color) {
+    public void drawText(Graphics g, String name, Color color) {
         g.setColor(color);
-        g.drawChars(name, 0, name.length, x1 + 5, y1 + 20);
+        g.drawString(name, x1 + 5, y1 + 20);
     }
 }

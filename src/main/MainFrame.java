@@ -2,6 +2,7 @@ package main;
 
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import data.Helper;
+import data.Node;
 import data.Parent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,6 +10,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class MainFrame extends javax.swing.JFrame {
 
+    /**
+     * Constructor de la vista de la interfaz gráfica, inicializa los
+     * componentes de la vista, inicializa el indicador de selección y relación
+     * y además escribe las instrucciones de uso del programa
+     */
     public MainFrame() {
         initComponents();
         Helper.initIndicator();
@@ -359,12 +365,22 @@ public class MainFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Configura el panel de control dependiendo de si se ha seleccionado un
+     * nodo X ó Y y establece valores iniciales para los campos de texto de
+     * cambio de nombre entre otros y además obtiene la relación entre el nodo X
+     * y Y si ambos han sido seleccionados y la muestra
+     */
     private void updateOthers() {
-        boolean selected = Helper.getSelectedNode() != null;
+        Node selectedNode = Helper.getSelectedNode();
+        boolean selected = selectedNode != null;
         boolean secondary = Helper.getSecondaryNode() != null;
+        boolean canAdd = selected && selectedNode.getLevel() <= 3 && !selectedNode.isBusy();
         this.childName.setText("");
         this.newName.setText("");
-        this.childName.setEnabled(selected);
+        this.newTreeName.setText("");
+        this.childName.setEnabled(canAdd);
+        this.generate.setEnabled(false);
         this.changeName.setEnabled(false);
         this.addChild.setEnabled(false);
         this.newName.setEnabled(selected);
@@ -387,11 +403,25 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Llama al método que establece las propiedades graficas de todos los nodos
+     * y luego manda a dibujar
+     *
+     * @param type Tipo de dibujado que se hará
+     */
     private void updateUI(int type) {
         Helper.setDrawingProps();
         Helper.drawTree(this.treeView.getGraphics(), type);
     }
 
+    /**
+     * Evento de click en el panel de dibujado del árbol, establece el nodo
+     * selecionado ó secundario basándose en el punto en que se hizo click y
+     * establece el nodo dependiendo del botón que ese presionó, luego manda a
+     * dibujar todos los nodos
+     *
+     * @param evt Información del evento de click
+     */
     private void treeViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treeViewMouseClicked
         int node = evt.getButton() == java.awt.event.MouseEvent.BUTTON3 ? Helper.SECONDARY_NODE : Helper.SELECTED_NODE;
         Helper.onClick(evt.getX(), evt.getY(), node);
@@ -399,53 +429,105 @@ public class MainFrame extends javax.swing.JFrame {
         this.updateOthers();
     }//GEN-LAST:event_treeViewMouseClicked
 
+    /**
+     * Evento de click del botón de agregar hijo, manda a agregar el hijo al
+     * nodo seleccionado (X) y redibuja el árbol
+     *
+     * @param evt Información del evento de click
+     */
     private void addChildActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addChildActionPerformed
         Helper.addChild(new Parent(this.childName.getText().trim()), false);
         this.childName.setText("");
         this.addChild.setEnabled(false);
         this.updateUI(Helper.NO_CLEAN);
+        this.updateOthers();
     }//GEN-LAST:event_addChildActionPerformed
 
+    /**
+     * Evento de click del botón de eliminar seleccionado, elimina el nodo,
+     * actualiza el panel de control y actualiza la vista del árbol
+     *
+     * @param evt Información del evento de click
+     */
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         Helper.removeSelected();
-        this.addChild.setEnabled(false);
-        this.childName.setText("");
-        this.updateUI(Helper.CLEAN_ALL);
         this.updateOthers();
+        this.updateUI(Helper.CLEAN_ALL);
     }//GEN-LAST:event_deleteActionPerformed
 
+    /**
+     * Evento de teclado del campo de texto de agregar hijo, habilita el botón
+     * de agregar hijo en caso de que el campo no esté vacío
+     *
+     * @param evt Información del evento de teclado
+     */
     private void childNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_childNameKeyReleased
         this.addChild.setEnabled(!this.childName.getText().trim().equals(""));
     }//GEN-LAST:event_childNameKeyReleased
 
+    /**
+     * Evento de teclado del campo de texto de cambiar de nombre, habilita el
+     * botón de cambiar nombre en caso de que el campo no esté vacío
+     *
+     * @param evt Información del evento de teclado
+     */
     private void newNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_newNameKeyReleased
         this.changeName.setEnabled(!this.newName.getText().trim().equals(""));
     }//GEN-LAST:event_newNameKeyReleased
 
+    /**
+     * Evento de click del botón de cambio de nombre, cambia el nombre del nodo
+     * seleccionado (X), actualiza el panel de control y actualiza la vista del
+     * árbol
+     *
+     * @param evt Información del evento de click
+     */
     private void changeNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeNameActionPerformed
         Helper.getSelectedNode().setName(this.newName.getText().trim());
-        this.newName.setText("");
         this.updateOthers();
         this.updateUI(Helper.NO_CLEAN);
     }//GEN-LAST:event_changeNameActionPerformed
 
+    /**
+     * Evento de click del botón de crear nuevo árbol, crea el árbol, actualiza
+     * el panel de control y actualiza la vista del árbol
+     *
+     * @param evt Información del evento de click
+     */
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         Helper.addChild(new Parent(this.newTreeName.getText().trim()), true);
-        this.newTreeName.setText("");
-        this.generate.setEnabled(false);
         this.updateOthers();
         this.updateUI(Helper.CLEAN_ALL);
     }//GEN-LAST:event_generateActionPerformed
 
+    /**
+     * Evento de teclado que habilita el botón de crear nuevo árbol si el campo
+     * no está vacío
+     *
+     * @param evt Información del evento de teclado
+     */
     private void newTreeNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_newTreeNameKeyReleased
         this.generate.setEnabled(!this.newTreeName.getText().trim().equals(""));
     }//GEN-LAST:event_newTreeNameKeyReleased
 
+    /**
+     * Evento de click del botón de generar árbol de prueba, manda a generar el
+     * árbol, actualiza el panel de control y actualiza la vista del árbol
+     *
+     * @param evt Información del evento de click
+     */
     private void generate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generate1ActionPerformed
         Helper.testTree();
+        this.updateOthers();
         this.updateUI(Helper.CLEAN_EXTRA);
     }//GEN-LAST:event_generate1ActionPerformed
 
+    /**
+     * Punto de partida del programa, establece el Look And Feel en
+     * WindowsLookAndFeel, instancia un nuevo frame y lo muestra
+     *
+     * @param args
+     */
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel(new WindowsLookAndFeel());
@@ -455,10 +537,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainFrame().setVisible(true);
         });
     }
 

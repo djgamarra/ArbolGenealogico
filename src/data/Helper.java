@@ -112,31 +112,15 @@ public class Helper {
     }
 
     /**
-     * Dibuja el árbol genealógico
+     * Llama a dibujar el fondo y el árbol genealógico
      *
      * @param g Instancia de Graphics en la que se dibujará el árbol
      * @param type Tipo de dibujado que se hará, sólo cambia el qué de lo que ya
      * estaba se va a borrar
      */
     public static void drawTree(Graphics g, int type) {
-        ArrayList<Node> level;
         base(g, type);
-        int i = 0;
-        do {
-            level = TREE.getLevel(i);
-            for (Node node : level) {
-                if (node == selectedNode && node == secondaryNode) {
-                    node.draw(g, SELECTED, SECONDARY, LINE);
-                } else if (node == selectedNode) {
-                    node.draw(g, SELECTED, LINE);
-                } else if (node == secondaryNode) {
-                    node.draw(g, SECONDARY, LINE);
-                } else {
-                    node.draw(g, NORMAL, LINE);
-                }
-            }
-            i++;
-        } while (!level.isEmpty());
+        TREE.draw(g, SELECTED, SECONDARY, NORMAL, LINE, selectedNode, secondaryNode);
         g.dispose();
     }
 
@@ -194,24 +178,25 @@ public class Helper {
      */
     private static void drawIndicator(Graphics g) {
         int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
-        g.setColor(selectedNode == null ? Color.WHITE : SELECTED);
+        g.setColor(selectedNode == null ? NORMAL : SELECTED);
         g.fillPolygon(halfL);
-        g.setColor(secondaryNode == null ? Color.WHITE : SECONDARY);
+        g.setColor(secondaryNode == null ? NORMAL : SECONDARY);
         g.fillPolygon(halfR);
         g.setColor(LINE);
         g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
         g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
         g.drawLine(x2 - 5, y1 + 5, x2 - 16, y2 - 5);
         g.drawLine(x2 - 11, y2 - 11, x2 - 16, y1 + 5);
+        boolean hasRelation = selectedNode != null && secondaryNode != null && !calcRelationship().equals("...");
         if (selectedNode == null || secondaryNode == null || selectedNode == secondaryNode) {
             int[][] pos = new int[][]{
                 {x1 + medWidth + d - 3, x1 + medWidth + d + 3, x1 + medWidth - d + 3, x1 + medWidth - d - 3},
                 {y1 + 4, y1 + 4, y2 - 4, y2 - 4}
             };
             g.fillPolygon(pos[0], pos[1], 4);
-        } else if (!calcRelationship().equals("...")) {
+        } else if (hasRelation) {
             g.setColor(LINE);
-
+            g.drawString("Relación directa", 105, 26);
             for (int i = 1; i < width - 40 - d * 2; i++) {
                 if (i % 2 == 0) {
                     g.setColor(SECONDARY);
@@ -220,6 +205,9 @@ public class Helper {
                 }
                 g.drawLine(x1 + 20 + d * 2 + i, y1 + 4, x1 + 20 + i, y2 - 4);
             }
+        } else if (!hasRelation) {
+            g.setColor(LINE);
+            g.drawString("Relación indirecta", 105, 26);
         }
         g.setColor(LINE);
         g.drawPolygon(indicator);
@@ -237,6 +225,7 @@ public class Helper {
      */
     private static void base(Graphics g, int type) {
         g.setColor(BACKGROUND);
+        g.fillRect(100, 0, WIDTH - 100, 40);
         switch (type) {
             case NO_CLEAN:
                 g.fillRect(0, 0, 14, HEIGHT);
@@ -277,7 +266,8 @@ public class Helper {
             "Milena Arias",
             "Pedro Perez",
             "Estefani Tellez",
-            "Maria Patricia",};
+            "Maria Patricia"
+        };
         int i = (int) (Math.random() * names.length);
         addChild(new Parent(names[i]), true);
         i++;
@@ -324,15 +314,9 @@ public class Helper {
                 g.fillRect(0, y1, 2, y2 - y1);
             }
             g.fillRect(0, y1, 14, 20);
-            char[] chars = Integer.toString(TREE.difOfLevels(selectedNode, secondaryNode)).toCharArray();
+            String diff = Integer.toString(TREE.difOfLevels(selectedNode, secondaryNode));
             g.setColor(NORMAL);
-            g.drawChars(chars, 0, chars.length, 3, y1 + 15);
-//            if (TREE.isSubtree(up, down)) {
-//            } else {
-//                g.fillRect(0, y1, 14, 20);
-//                g.setColor(NORMAL);
-//                g.drawChars(new char[]{'-'}, 0, 1, 3, y1 + 15);
-//            }
+            g.drawString(diff, 3, y1 + 15);
         }
     }
 }

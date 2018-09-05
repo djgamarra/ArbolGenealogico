@@ -519,7 +519,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void generate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generate1ActionPerformed
         Helper.testTree();
         this.updateOthers();
-        this.updateUI(Helper.CLEAN_EXTRA);
+        this.updateUI(Helper.NO_CLEAN);
     }//GEN-LAST:event_generate1ActionPerformed
 
     /**

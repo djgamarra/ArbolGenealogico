@@ -163,7 +163,7 @@ public class GraphicInfo {
     }
 
     /**
-     * Dibuja el texto del nodo
+     * Dibuja el texto del nodo completo ó acortado con ... al final
      *
      * @param g Instancia de Graphics en la que se va a dibujar
      * @param name Nombre del pariente convertido a array
@@ -171,6 +171,12 @@ public class GraphicInfo {
      */
     public void drawText(Graphics g, String name, Color color) {
         g.setColor(color);
+        if (g.getFontMetrics().stringWidth(name) > width) {
+            while (g.getFontMetrics().stringWidth(name + (level > 4 ? "......" : "....")) > width) {
+                name = name.substring(0, name.length() - 1);
+            }
+            name = name + "...";
+        }
         g.drawString(name, x1 + 5, y1 + 20);
     }
 }

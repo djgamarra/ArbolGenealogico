@@ -7,9 +7,8 @@ import java.util.ArrayList;
 
 public class Helper {
 
-    public final static int CLEAN_ALL = 0;
-    public final static int CLEAN_EXTRA = 1;
-    public final static int NO_CLEAN = -1;
+    public final static int CLEAN_ALL = 1;
+    public final static int NO_CLEAN = 0;
     public final static int SELECTED_NODE = 0;
     public final static int SECONDARY_NODE = 1;
     private final static int WIDTH = 1200;
@@ -214,6 +213,37 @@ public class Helper {
     }
 
     /**
+     * Dibuja la bandera de las generaciones
+     *
+     * @param g Instancia de Graphics en la que se dibujará
+     */
+    private static void drawFlag(Graphics g) {
+        if (selectedNode != null && secondaryNode != null) {
+            Node up;
+            Node down;
+            if (selectedNode.gInfo.y1 < secondaryNode.gInfo.y1) {
+                up = selectedNode;
+                down = secondaryNode;
+            } else {
+                up = secondaryNode;
+                down = selectedNode;
+            }
+            GraphicInfo g1 = up.gInfo;
+            GraphicInfo g2 = down.gInfo;
+            int y1 = g1.y1 + 1;
+            int y2 = g2.y2 - 1;
+            g.setColor(LINE);
+            if (up != down) {
+                g.fillRect(0, y1, 2, y2 - y1);
+            }
+            g.fillRect(0, y1, 14, 20);
+            String diff = Integer.toString(TREE.difOfLevels(selectedNode, secondaryNode));
+            g.setColor(NORMAL);
+            g.drawString(diff, 3, y1 + 15);
+        }
+    }
+
+    /**
      * Colorea la base donde se dibujará, borrando así sólo lo necesario de lo
      * que ya estaba dibujado dependiendo de que tipo de dibujado se hará,
      * además llama a drawIndicator y a drawFlag para que hagan el dibujado de
@@ -232,10 +262,6 @@ public class Helper {
                 break;
             case CLEAN_ALL:
                 g.fillRect(0, 0, WIDTH, HEIGHT);
-                break;
-            case CLEAN_EXTRA:
-                g.fillRect(0, 271, WIDTH, HEIGHT - 270);
-                g.fillRect(0, 0, 14, HEIGHT);
                 break;
         }
         drawIndicator(g);
@@ -287,36 +313,5 @@ public class Helper {
             level++;
             levelNodes = TREE.getLevel(level);
         } while (level < 4);
-    }
-
-    /**
-     * Dibuja la bandera de las generaciones
-     *
-     * @param g Instancia de Graphics en la que se dibujará
-     */
-    private static void drawFlag(Graphics g) {
-        if (selectedNode != null && secondaryNode != null) {
-            Node up;
-            Node down;
-            if (selectedNode.gInfo.y1 < secondaryNode.gInfo.y1) {
-                up = selectedNode;
-                down = secondaryNode;
-            } else {
-                up = secondaryNode;
-                down = selectedNode;
-            }
-            GraphicInfo g1 = up.gInfo;
-            GraphicInfo g2 = down.gInfo;
-            int y1 = g1.y1 + 1;
-            int y2 = g2.y2 - 1;
-            g.setColor(LINE);
-            if (up != down) {
-                g.fillRect(0, y1, 2, y2 - y1);
-            }
-            g.fillRect(0, y1, 14, 20);
-            String diff = Integer.toString(TREE.difOfLevels(selectedNode, secondaryNode));
-            g.setColor(NORMAL);
-            g.drawString(diff, 3, y1 + 15);
-        }
     }
 }

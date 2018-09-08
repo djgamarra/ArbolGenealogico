@@ -7,23 +7,28 @@ import java.util.ArrayList;
 
 public class Helper {
 
-    public final static int CLEAN_ALL = 1;
+    private static Node selectedNode;
+    private static Node secondaryNode;
+
     public final static int NO_CLEAN = 0;
+    public final static int CLEAN_ALL = 1;
     public final static int SELECTED_NODE = 0;
     public final static int SECONDARY_NODE = 1;
+    private final static int COMPLETE_INDICATOR = 0;
+    private final static int HALF_LEFT_INDICATOR = 1;
+    private final static int HALF_RIGHT_INDICATOR = 2;
+
     private final static int WIDTH = 1200;
     private final static int HEIGHT = 389;
     private final static Tree TREE = new Tree();
-    private static Node selectedNode;
-    private static Node secondaryNode;
+    private final static Color BACKGROUND = new Color(255, 244, 193);
     private final static Color NORMAL = new Color(250, 250, 250);
     private final static Color SELECTED = new Color(204, 255, 204);
     private final static Color SECONDARY = new Color(204, 204, 255);
     private final static Color LINE = new Color(66, 66, 130);
-    private final static Color BACKGROUND = new Color(255, 244, 193);
-    private static Polygon indicator;
-    private static Polygon halfL;
-    private static Polygon halfR;
+    private final static Polygon INDICATOR = getIndicator(COMPLETE_INDICATOR);
+    private final static Polygon HALFLEFTINDICATOR = getIndicator(HALF_LEFT_INDICATOR);
+    private final static Polygon HALFRIGHTINDICATOR = getIndicator(HALF_RIGHT_INDICATOR);
 
     /**
      *
@@ -148,26 +153,34 @@ public class Helper {
     }
 
     /**
-     * Inicializa el indicador de relación y selección que se dibuja en la parte
-     * superior del panel del árbol
+     * @param type Tipo de indicador (mitad izquierda, mitad derecha o completo)
+     * @return Poligono del indicador con los parámetros requeridos dependiendo
+     * el tipo
      */
-    public static void initIndicator() {
+    public static Polygon getIndicator(int type) {
         int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
-        int[][] coord = new int[][]{
-            {x1, x1 + 20, x1 + 20, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + 20, x1 + 20, x1},
-            {y1, y1, y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4, y2, y2}
-        };
-        int[][] halfLeft = new int[][]{
-            {x1, x1 + 20, x1 + 20, x1 + medWidth + d, x1 + medWidth - d, x1 + 20, x1 + 20, x1},
-            {y1, y1, y1 + 4, y1 + 4, y2 - 4, y2 - 4, y2, y2}
-        };
-        int[][] halfRight = new int[][]{
-            {x1 + medWidth + d, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + medWidth - d},
-            {y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4}
-        };
-        indicator = new Polygon(coord[0], coord[1], 12);
-        halfL = new Polygon(halfLeft[0], halfLeft[1], 8);
-        halfR = new Polygon(halfRight[0], halfRight[1], 8);
+        switch (type) {
+            case COMPLETE_INDICATOR:
+                int[][] coord = new int[][]{
+                    {x1, x1 + 20, x1 + 20, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + 20, x1 + 20, x1},
+                    {y1, y1, y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4, y2, y2}
+                };
+                return new Polygon(coord[0], coord[1], 12);
+            case HALF_LEFT_INDICATOR:
+                int[][] halfLeft = new int[][]{
+                    {x1, x1 + 20, x1 + 20, x1 + medWidth + d, x1 + medWidth - d, x1 + 20, x1 + 20, x1},
+                    {y1, y1, y1 + 4, y1 + 4, y2 - 4, y2 - 4, y2, y2}
+                };
+                return new Polygon(halfLeft[0], halfLeft[1], 8);
+            case HALF_RIGHT_INDICATOR:
+                int[][] halfRight = new int[][]{
+                    {x1 + medWidth + d, x2 - 20, x2 - 20, x2, x2, x2 - 20, x2 - 20, x1 + medWidth - d},
+                    {y1 + 4, y1 + 4, y1, y1, y2, y2, y2 - 4, y2 - 4}
+                };
+                return new Polygon(halfRight[0], halfRight[1], 8);
+            default:
+                return null;
+        }
     }
 
     /**
@@ -178,9 +191,9 @@ public class Helper {
     private static void drawIndicator(Graphics g) {
         int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
         g.setColor(selectedNode == null ? NORMAL : SELECTED);
-        g.fillPolygon(halfL);
+        g.fillPolygon(HALFLEFTINDICATOR);
         g.setColor(secondaryNode == null ? NORMAL : SECONDARY);
-        g.fillPolygon(halfR);
+        g.fillPolygon(HALFRIGHTINDICATOR);
         g.setColor(LINE);
         g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
         g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
@@ -209,7 +222,7 @@ public class Helper {
             g.drawString("Relación indirecta", 105, 26);
         }
         g.setColor(LINE);
-        g.drawPolygon(indicator);
+        g.drawPolygon(INDICATOR);
     }
 
     /**

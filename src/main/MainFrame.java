@@ -17,7 +17,6 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-        Helper.initIndicator();
         this.instructionsList.setText(""
                 + "1. Creando un nuevo arbol: Sección roja. Escribe el nombre de tu primer pariente para crear un nuevo arbol, luego haz click en el boton \"Crear nuevo arbol\".\n"
                 + "2. Agregando hijos a un pariente: Sección amarilla. Haz click en un pariente, se marcará en color verde, luego escribe el nombre del hijo a agregar y finalmente pulsa el botón de \"Agregar hijo\".\n"

@@ -53,7 +53,7 @@ public class Node {
      * ocuparía en caso de ser el hijo izquierdo
      */
     public void addChild(Parent parent, int pos) {
-        if (this.pos % 2 == 0) {
+        if (this.isLeftChild()) {
             if (this.left == null) {
                 this.left = new Node(parent, pos);
             } else if (this.right == null) {
@@ -66,6 +66,13 @@ public class Node {
                 this.left = new Node(parent, pos);
             }
         }
+    }
+
+    /**
+     * @return Verdadero si la posición relativa al nivel es par
+     */
+    public boolean isLeftChild() {
+        return this.pos % 2 == 0;
     }
 
     /**
@@ -122,7 +129,7 @@ public class Node {
      * @param name Nombre nuevo
      */
     public void setName(String name) {
-        this.parent.name = name;
+        this.parent.setName(name);
     }
 
     /**

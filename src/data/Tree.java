@@ -122,6 +122,29 @@ public class Tree {
     }
 
     /**
+     * Inicia el calculo de la profundidad
+     *
+     * @return Profundidad del árbol
+     */
+    public int getDepth() {
+        return this.getDepth(this.root, 1);
+    }
+
+    /**
+     * Función recursiva para calcular la profundidad del árbol
+     *
+     * @param root Raíz actual
+     * @param actualDepth Profundidad actual
+     * @return Profundidad del árbol
+     */
+    private int getDepth(Node root, final int actualDepth) {
+        if (root != null) {
+            return Math.max(getDepth(root.left, actualDepth + 1), getDepth(root.right, actualDepth + 1));
+        }
+        return actualDepth - 1;
+    }
+
+    /**
      * Función recursiva que busca todos los nodos en un mismo nivel
      *
      * @param level Nivel a buscar
@@ -371,7 +394,13 @@ public class Tree {
             return "Parentesco: Niet@";
         }
         return "...";
+    }
 
+    /**
+     * @return Verdadero si la raíz aún es nula
+     */
+    public boolean isVoid() {
+        return this.root == null;
     }
 
 }

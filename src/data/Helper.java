@@ -189,40 +189,42 @@ public class Helper {
      * @param g Instancia de Graphics en la que se dibujará
      */
     private static void drawIndicator(Graphics g) {
-        int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
-        g.setColor(selectedNode == null ? NORMAL : SELECTED);
-        g.fillPolygon(HALFLEFTINDICATOR);
-        g.setColor(secondaryNode == null ? NORMAL : SECONDARY);
-        g.fillPolygon(HALFRIGHTINDICATOR);
-        g.setColor(LINE);
-        g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
-        g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
-        g.drawLine(x2 - 5, y1 + 5, x2 - 16, y2 - 5);
-        g.drawLine(x2 - 11, y2 - 11, x2 - 16, y1 + 5);
-        boolean hasRelation = selectedNode != null && secondaryNode != null && !calcRelationship().equals("...");
-        if (selectedNode == null || secondaryNode == null || selectedNode == secondaryNode) {
-            int[][] pos = new int[][]{
-                {x1 + medWidth + d - 3, x1 + medWidth + d + 3, x1 + medWidth - d + 3, x1 + medWidth - d - 3},
-                {y1 + 4, y1 + 4, y2 - 4, y2 - 4}
-            };
-            g.fillPolygon(pos[0], pos[1], 4);
-        } else if (hasRelation) {
+        if (!TREE.isVoid()) {
+            int x1 = 10, x2 = 100, y1 = 10, y2 = 30, width = x2 - x1, medWidth = width / 2, d = 6;
+            g.setColor(selectedNode == null ? NORMAL : SELECTED);
+            g.fillPolygon(HALFLEFTINDICATOR);
+            g.setColor(secondaryNode == null ? NORMAL : SECONDARY);
+            g.fillPolygon(HALFRIGHTINDICATOR);
             g.setColor(LINE);
-            g.drawString("Relación directa", 105, 26);
-            for (int i = 1; i < width - 40 - d * 2; i++) {
-                if (i % 2 == 0) {
-                    g.setColor(SECONDARY);
-                } else {
-                    g.setColor(SELECTED);
+            g.drawLine(x1 + 5, y1 + 5, x1 + 16, y2 - 5);
+            g.drawLine(x1 + 5, y2 - 5, x1 + 16, y1 + 5);
+            g.drawLine(x2 - 5, y1 + 5, x2 - 16, y2 - 5);
+            g.drawLine(x2 - 11, y2 - 11, x2 - 16, y1 + 5);
+            boolean hasRelation = selectedNode != null && secondaryNode != null && !calcRelationship().equals("...");
+            if (selectedNode == null || secondaryNode == null || selectedNode == secondaryNode) {
+                int[][] pos = new int[][]{
+                    {x1 + medWidth + d - 3, x1 + medWidth + d + 3, x1 + medWidth - d + 3, x1 + medWidth - d - 3},
+                    {y1 + 4, y1 + 4, y2 - 4, y2 - 4}
+                };
+                g.fillPolygon(pos[0], pos[1], 4);
+            } else if (hasRelation) {
+                g.setColor(LINE);
+                g.drawString("Relación directa", 105, 26);
+                for (int i = 1; i < width - 40 - d * 2; i++) {
+                    if (i % 2 == 0) {
+                        g.setColor(SECONDARY);
+                    } else {
+                        g.setColor(SELECTED);
+                    }
+                    g.drawLine(x1 + 20 + d * 2 + i, y1 + 4, x1 + 20 + i, y2 - 4);
                 }
-                g.drawLine(x1 + 20 + d * 2 + i, y1 + 4, x1 + 20 + i, y2 - 4);
+            } else if (!hasRelation) {
+                g.setColor(LINE);
+                g.drawString("Relación indirecta", 105, 26);
             }
-        } else if (!hasRelation) {
             g.setColor(LINE);
-            g.drawString("Relación indirecta", 105, 26);
+            g.drawPolygon(INDICATOR);
         }
-        g.setColor(LINE);
-        g.drawPolygon(INDICATOR);
     }
 
     /**

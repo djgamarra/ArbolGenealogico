@@ -2,7 +2,7 @@ package data;
 
 public class Parent {
 
-    String name;
+    private String name;
 
     /**
      * Constructor del pariente
@@ -25,5 +25,9 @@ public class Parent {
      */
     public String getShortName() {
         return this.name.split(" ")[0].trim();
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
